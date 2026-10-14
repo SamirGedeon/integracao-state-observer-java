@@ -1,0 +1,47 @@
+classDiagram
+    class Pedido {
+        -EstadoPedido estado
+        -List~ObservadorPedido~ observadores
+        +getStatus() String
+        +adicionarObservador(ObservadorPedido)
+        +removerObservador(ObservadorPedido)
+        +pagar()
+        +enviar()
+        +entregar()
+        +cancelar()
+        -mudarEstado(EstadoPedido)
+    }
+    class EstadoPedido {
+        <<interface>>
+        +nome() String
+        +pagar(Pedido)
+        +enviar(Pedido)
+        +entregar(Pedido)
+        +cancelar(Pedido)
+    }
+    class AguardandoPagamento
+    class Pago
+    class Enviado
+    class Entregue
+    class Cancelado
+    class ObservadorPedido {
+        <<interface>>
+        +aoMudarStatus(String, String)
+    }
+    class NotificadorConsole {
+        -String nome
+        +aoMudarStatus(String, String)
+    }
+    class Main {
+        +main(String[])
+    }
+    Pedido o-- EstadoPedido : estado atual
+    EstadoPedido <|.. AguardandoPagamento
+    EstadoPedido <|.. Pago
+    EstadoPedido <|.. Enviado
+    EstadoPedido <|.. Entregue
+    EstadoPedido <|.. Cancelado
+    Pedido o-- "0..*" ObservadorPedido : notifica
+    ObservadorPedido <|.. NotificadorConsole
+    Main --> Pedido : cria e conduz
+    Main --> NotificadorConsole : registra
